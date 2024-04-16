@@ -1,0 +1,155 @@
+# Supervised Learning
+- Supervised learning algorithms are trained using labels examples such as an input where the desired output is known.
+- For example, a piece of equipment could have data points labeled either “F” (failed) or “R” (runs).
+- The learning algorithm receives a set of inputs along with the corresponding correct outputs, and the algorithm learns by comparing its actual output with correct outputs to find errors.
+- It then modifies the model accordingly.
+- For example, it can anticipate when credit card transactions are likely to be fraudulent or which insurance customer is likely to file a claim.
+
+## What is Machine Learning?
+- Machine learning is a method of data analysis that automates analytical model building.
+- Using algorithms that iteratively learn from data, machine learning allows computers to find hidden insights without being explicitly programmed where to look.
+
+## Unsupervised learning
+- Unsupervised learning is used against data that has no historical labels.
+- The system is not told the "right answer." The algorithm must figure out what is being shown.
+- The goal is to explore the data and find some structure within.
+
+## Training Data
+- data is often split into three sets:
+    - Training data: 
+        - Used to train model parameters
+    - Validation Data:
+        - Used to determine what model hyperparameters to adjust
+    - Test data
+        - Used to get some final performance metric
+- true performance is the final test on unseen test data
+- We will use train / test split in this course
+- Students will have the option to go back and adjust parameters
+- A final split can be done at the end of the course to get 3 data sets
+
+2.1 What Is Statistical Learning?
+More generally, suppose that we observe a quantitative response Y and p diﬀerent predictors, X1 , X2 , . . . , Xp . We assume that there is some relationship between Y and X = (X1 , X2 , . . . , Xp ), which can be written in the very general form:
+```
+Y = f (X) + E.
+```
+
+In essence, statistical learning refers to a set of approaches for estimating f: In this chapter we outline some of the key theoretical concepts that arise in estimating f, as well as tools for evaluating the estimates obtained.
+
+
+## Why Estimate f ?
+
+There are two main reasons that we may wish to estimate f : prediction and inference. We discuss each in turn.
+
+### Prediction
+In many situations, a set of inputs X are readily available, but the output Y cannot be easily obtained. In this setting, since the error term averages to zero, we can predict Y using
+```
+    Ŷ = fˆ(X)
+```
+
+#### Example
+More generally, suppose that we observe a quantitative response Y and p diﬀerent predictors, X1 , X2 , . . . , Xp . We assume that there is some relationship between Y and X = (X1 , X2 , . . . , Xp ), which can be written in the very general form Y = f (X) + E.
+- The accuracy of Ŷ as a prediction for Y depends on two quantities, which we will call the **reducible error** and the **irreducible error**.
+- In general f^ will not be a perfect estimator for f and this inaccuracy will produce some error, known as **reducible error**. As we have the potentital to reduce inaccuracy of f by using the most appropriate statistical learning technique to estimate F.
+- However, even if it were possible to form a perfect estimate for f, so that our estimated response took the form Ŷ = f (X), our prediction would still have some error in it!
+- This is because Y is also a function of + E. 
+- Therefore, variability associated with E also affects the accuracy of our predictions. This is known as the **irreducible error**, because no matter how well we estimate f:, we cannot reduce the error introduced by E.
+- Consider a given estimate fˆ and a set of predictors X, which yields the prediction Ŷ = fˆ(X). Assume for a moment that both fˆ and X are ﬁxed.
+```
+~(Y − Ŷ )2 = ~[f (X) + E − fˆ(X)]2
+= [f (X) − fˆ(X)]2 + Var(E)
+```
+- where ~(Y − Ŷ) represents the average, or expected value, of the squared expected diﬀerence between the predicted and actual value of Y , and Var(E) repre- value sents the variance associated with the error term E.
+- It is important to keep in mind that the **irreducible error** will always provide an upper bound on the accuracy of our prediction for Y. This bound is almost always unknown in practice.
+
+### Inference 
+- We are often interested in understanding the way that Y is aﬀected as X1 , . . . , Xp change.
+- In this setting, one may be interested in answering the following questions:
+    - Which predictors are associated with the response? It is often the case that only a small fraction of the available predictors are substantially associated with Y . Identifying the few important predictors among a large set of possible variables can be extremely useful, depending on the application.
+    - What is the relationship between the response and each predictor? Some predictors may have a positive relationship with Y , in the sense that increasing the predictor is associated with increasing values of Y . Other predictors may have the opposite relationship. Depending on the complexity of f , the relationship between the response and a given predictor may also depend on the values of the other predictors.
+    - Can the relationship between Y and each predictor be adequately summarized using a linear equation, or is the relationship more complicated? Historically, most methods for estimating f have taken a linear form. In some situations, such an assumption is reasonable or even desirable. But often the true relationship is more complicated, in which case a linear model may not provide an accurate representation of the relationship between the input and output variables.
+- Depending on whether our ultimate goal is prediction, inference, or a combination of the two, diﬀerent methods for estimating f may be appropriate.
+- For example, linear models allow for relatively simple and interpretable inference, but may not yield as accurate predictions as some other approaches
+- In contrast, some of the highly non-linear approaches that we discuss in the later chapters of this book can potentially provide quite accurate predictions for Y , but this comes at the expense of a less interpretable model for which inference is more challenging.
+
+## How Do We Estimate f ?
+- Throughout this book, we explore many linear and non-linear approaches for estimating f . However, these methods generally share certain characteristics.
+- We will always assume that we have observed a set of n diﬀerent data points.
+- For example in Figure 2.2 we observed n = 30 data points. These observations are called the **training data** because we will use these training data observations to train, or teach, our method how to estimate f .
+- Our goal is to apply a statistical learning method to the training data in order to estimate the unknown function f . In other words, we want to ﬁnd a function fˆ such that Y ≈ fˆ(X) for any observation (X, Y ).
+- Broadly speaking, most statistical learning methods for this task can be characterized as either parametric or non-parametric.
+
+### Parametic Methods 
+- Parametric methods involve a two-step modelbased approach.
+1. First, we make an assumption about the functional form, or shape, of f . For example, one very simple assumption is that f is linear in X:
+```
+    f (X) = β0 + β1 X1 + β2 X2 + . . . + βp Xp .
+```
+This is a linear model, which will be discussed extensively in Chap- ter 3. Once we have assumed that f is linear, the problem of estimating f is greatly simpliﬁed. Instead of having to estimate an entirely arbitrary p-dimensional function f (X), one only needs to estimate the p + 1 coeﬃcients β0 , β1 , . . . , βp .
+2. After a model has been selected, we need a procedure that uses the training data to ﬁt or train the model. In the case of the linear model ﬁt (2.4), we need to estimate the parameters β0 , β1 , . . . , βp . That is, we want to ﬁnd values of these parameters such that:
+```
+Y ≈ β0 + β1X1 + β2X2 + . . . + βpXp .
+```
+The most common approach to ﬁtting the model (2.4) is referred to as (ordinary) least squares, which we discuss in Chapter 3. How least squares ever, least squares is one of many possible ways way to ﬁt the linear model. In Chapter 6, we discuss other approaches for estimating the parameters in (2.4).
+
+- The model-based approach just described is referred to as parametric; it reduces the problem of estimating f down to one of estimating a set of parameters.
+- Figure 2.4 shows an example of the parametric approach applied to theIncome data from Figure 2.3. We have ﬁt a linear model of the form
+
+```
+income ≈ β0 + β1 × education + β2 × seniority.
+```
+
+### Non-parmetric Methods
+- Non-parametric methods do not make explicit assumptions about the functional form of f . Instead they seek an estimate of f that gets as close to the data points as possible without being too rough or wiggly.
+- Any parametric approach brings with it the possibility that the functional form used to
+estimate f is very diﬀerent from the true f , in which case the resulting model will not ﬁt the data well.
+- But non-parametric approaches do suﬀer from a major disadvantage: since they do not reduce the problem of estimating f to a small number of parameters, a very large number of observations (far more than is typically needed for a parametric approach) is required in order to obtain an accurate estimate for f .
+- An example of a non-parametric approach to ﬁtting the Income data is shown in Figure 2.5. A thin-plate spline is used to estimate f . This approach does not impose any prespeciﬁed model on f .
+- It instead attempts to produce an estimate for f that is as close as possible to the observed data, subject to the ﬁt that is, the yellow surface in Figure 2.5—being smooth.
+- In order to fit the data the analyst must select the soothness.
+- The resulting estimate ﬁts the observed data perfectly! However, the spline ﬁt shown in Figure 2.6 is far more variable than the true function f , from Figure 2.3. This is an example of overﬁtting the data, which we discussed previously.
+- overfitting: in general, ﬁtting a more ﬂexible model requires estimating a
+greater number of parameters. These more complex models can lead to a phenomenon known as **overﬁtting** the data, which essentially means they follow the errors, or noise, too closely.
+
+## The Trade-Oﬀ Between Prediction Accuracy and Model Interpretability
+- Of the many methods that we examine in this book, some are less flexible, or more restrictive, in the sense that they can produce just a relatively small range of shapes to estimate f.
+- For example, linear regression is a relatively inflexible approach, because it can only generate linear functions such as the lines shown in Figure 2.1 or the plane shown in Figure 2.3.
+
+![fig2.3](./img/mchn-learning-interpretability-flexiblity.png)
+
+FIGURE 2.7. A representation of the tradeoff between flexibility and interpretability, using different statistical learning methods. In general, as the flexibility of a method increases, its interpretability decreases.
+
+- Other methods, such as the thin plate splines shown in Figures 2.5 and 2.6, are considerably more flexible because they can generate a much wider range of possible shapes to estimate f.
+- There are several reasons that we might prefer a more restrictive model. If we are mainly interested in inference, then restrictive models are much more **interpretable**.
+- For instance, when inference is the goal, the linear model may be a good choice since it will be quite easy to understand the relationship between Y and X1, X2,...,Xp.
+- In contrast, very flexible approaches, such as the splines discussed in Chapter 7 and displayed in Figures 2.5 and 2.6, and the boosting methods discussed in Chapter 8, can lead to such complicated estimates of f that it is difficult to understand how any individual predictor is associated with the response.
+
+
+## Supervised Versus Unsupervised Learning
+- Most statistical learning problems fall into one of two categories: **supervised** 
+or **unsupervised**.
+- The examples that we have discussed so far in this chapter all fall into the supervised learning domain. For each observation of the predictor measurement(s) Xi, i = 1,...,n there is an associated response measurement Yi.
+- We wish to fit a model that relates the response to the predictors, with the aim of accurately predicting the response for future observations (prediction) or better understanding the relationship between the response and the predictors (inference)
+- Many classical statistical learning methods such as linear regression and logistic regression (Chapter 4), as logistic well as more modern approaches such as GAM, boosting, and support vector machines, operate in the supervised learning domain.
+- In contrast, **unsupervised** learning describes the somewhat more challenging situation in which for every observation i = 1,...,n, we observe a vector of measurements Xi but no associated response Yi. 
+- In this setting, we are in some sense working blind; the situation is referred to as unsupervised because we lack a response variable that can supervise our analysis.
+-  One statistical learning tool that we may use in this setting is cluster analysis, or clustering. The goal of cluster analysis cluster is to ascertain, on the basis of x1,...,xn, whether the observations fall into relatively distinct groups. 
+- However, sometimes the question of whether an analysis should be considered supervised or unsupervised is less clear-cut. For instance, suppose that we have a set of n observations. For m of the observations, where m<n, we have both predictor measurements and a response measurement.
+- For the remaining n − m observations, we have predictor measurements but no response measurement. Such a scenario can arise if the predictors can be measured relatively cheaply but the corresponding responses are much more expensive to collect.
+
+## Regression Versus Classification Problems
+- Variables can be characterized as either **quantitative** or **qualitative** (also known as **categorical**).
+- We tend to refer to problems with a **quantitative** response as **regression** problems, while those involving a **qualitative** response are often referred to as **classification** problems.
+- **Least squares linear regression** (Chapter 3) is used with a quantitative response, whereas **logistic regression** (Chapter 4) is typically used with a qualitative (two-class, or binary) response.
+- Least squares linear regression (Chapter 3) is used with a quantitative response, whereas logistic
+regression (Chapter 4) is typically used with a qualitative (two-class, or binary) response.
+- Some statistical methods, such as K-nearest neighbors (Chapters 2 and 4) and boosting (Chapter 8), can be used in the case of either quantitative or qualitative responses
+- We tend to select statistical learning methods on the basis of whether the response is quantitative or qualitative; i.e. we might use linear regression when quantitative and logistic regression when qualitative. 
+- Most of the statistical learning methods discussed in this book can be applied regardless of the predictor variable type, provided that any qualitative predictors are properly coded before the analysis is performed. This is discussed in Chapter 3.
+
+## Assessing Model Accuracy
+- Why is it necessary to introduce so many different statistical learning approaches, rather than just a single best method? There is no free lunch in statistics: no one method dominates all others over all possible data sets
+- Selecting the best approach can be one of the most challenging parts of performing statistical learning in
+practice
+
+### Measuring the Quality of Fit
+
