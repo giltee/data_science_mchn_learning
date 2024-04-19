@@ -152,4 +152,144 @@ regression (Chapter 4) is typically used with a qualitative (two-class, or binar
 practice
 
 ### Measuring the Quality of Fit
+- In order to evaluate the performance of a statistical learning method on a given data set, we need some way to measure how well its predictions actually match the observed data. 
+-  In the regression setting, the most commonly-used measure is the mean squared error (MSE), given by
+```
+          n
+MSE = 1/n E (yi − ˆf(xi))2
+         i=1
 
+fig 2.5
+```
+- where ˆf(xi) is the prediction that ˆf gives for the ith observation
+- The MSE will be **small** if the predicted responses are very close to the true responses, and will be **large** if for some of the observations, the predicted and true responses differ substantially
+- The MSE in (2.5) is computed using the training data that was used to fit the model, and so should more accurately be referred to as the **training MSE**. 
+- But in general, we do not really care how well the method works training on the training data. Rather, we are interested in the accuracy of the predictions that we obtain when we apply our method to previously unseen
+test data.
+- To state it more mathematically, suppose that we fit our statistical learning method on our training observations {(x1, y1),(x2, y2),...,(xn, yn)}, and we obtain the estimate ˆf. We can then compute ˆf(x1), ˆf(x2),..., ˆf(xn).
+- If these are approximately equal to y1, y2,...,yn, then the training MSE given by (2.5) is small. However, we are really not interested in whether ˆf(xi) ≈ yi; instead, we want to know whether ˆf(x0) is approximately equal
+to y0, where (x0, y0) is a previously unseen test observation not used to train the statistical learning method.
+- We want to choose the method that gives the lowest test MSE, as opposed to the lowest training MSE. In other words, if we had a large number of test observations, we could compute:
+```
+Ave( ˆf(x0) − y0)^2
+
+fig 2.6
+```
+- The average squared prediction error for these test observations (x0, y0). We’d like to select the model for which the average of this quantity—the test MSE—is as small as possible.
+-  How can we go about trying to select a method that minimizes the test MSE? In some settings, we may have a test data set available—that is, we may have access to a set of observations that were not used to train the statistical learning method.
+- But what if no test observations are available? In that case, one might imagine simply selecting a statistical learning method that minimizes the training MSE
+- This seems like it might be a sensible approach, since the training MSE and the test MSE appear to be closely related.
+- Unfortunately, there is a fundamental problem with this strategy: there is no guarantee that the method with the lowest training MSE will also have the lowest test MSE. 
+- n to the right-hand panel of Figure 2.9. The grey curve displays the average training MSE as a function of flexibility, or more formally the degrees of freedom, for a number of smoothing splines. 
+- Throughout this book, we discuss a variety of approaches that can be used in practice to estimate this minimum
+point. One important method is **cross-validation** (Chapter 5), which is a method for estimating test MSE using the training data. 
+
+### The Bias-Variance Trade-Of
+- The U-shape observed in the test MSE curves (Figures 2.9–2.11) turns out to be the result of two competing properties of statistical learning methods.
+- Though the mathematical proof is beyond the scope of this book, it is possible to show that the expected test MSE, for a given value x0, can always be decomposed into the sum of three fundamental quantities: thevariance of ˆf(x0), the squared bias of ˆf(x0) and the variance of the error variance bias terms. That is,
+![mse-estimate](./img/mse_estimate.png)
+- Here the notation ```E(y0 − ˆf(x0))2``` defines the expected test MSE, and refers to the average test MSE that we would obtain if we repeatedly estimated f using a large number of training sets, and tested each at x0.
+- Equation 2.7 tells us that in order to minimize the expected test error, we need to select a statistical learning method that simultaneously achieves **low variance** and **low bias**.
+- Note that variance is inherently a nonnegative quantity, and squared bias is also nonnegative. Hence, we see that the expected test MSE can never lie below Var(), the irreducible error from (2.3).
+- What do we mean by the variance and bias of a statistical learning method? Variance refers to the amount by which ˆf would change if we estimated it using a different training data set.
+- What do we mean by the variance and bias of a statistical learning method?
+    - **Variance** refers to the amount by which ˆf would change if we estimated it using a different training data set. Since the training data are used to fit the statistical learning method, different training data sets will result in a different ˆf. 
+    - On the other hand, bias refers to the error that is introduced by approximating a real-life problem, which may be extremely complicated, by a much simpler model.
+- As a general rule, as we use more flexible methods, the variance will increase and the bias will decrease.
+- The relative rate of change of these two quantities determines whether the test MSE increases or decreases. As we increase the flexibility of a class of methods, the bias tends to initially decrease faster than the variance increases.
+- Good test set performance of a statistical learning method requires low variance as well as low squared bias.
+- This is referred to as a trade-off trade-off because it is easy to obtain a method with extremely low bias but
+high variance (for instance, by drawing a curve that passes through every single training observation) or a method with very low variance but high bias (by fitting a horizontal line to the data).
+- This is referred to as a trade-off trade-off because it is easy to obtain a method with extremely low bias but
+high variance (for instance, by drawing a curve that passes through every single training observation) or a method with very low variance but high bias (by fitting a horizontal line to the data).
+- In a real-life situation in which f is unobserved, it is generally not possible to explicitly compute the test MSE, bias, or variance for a statistical learning method.
+
+### The Classification Setting
+- Suppose that we seek to estimate f on the basis of training observations ```{(x1, y1),...,(xn, yn)}```, where now ```y1,...,yn``` are qualitative. 
+-  The most common approach for quantifying the accuracy of our estimate ˆf is the **training error rate**, the proportion of mistakes that are made if we apply our estimate ˆf to the training observations:
+![training-error-rate](./img/training-error-rate.png)
+- Here is the predicted class label for the ith observation using ˆf. And I(yi != ˆyi) is an indicator variable that equals 1 if yi != ˆyi and zero if yi == ˆyi.  
+- The test error rate associated with a set of test observations of the form test error (x0, y0) is given by:
+    - ```Ave (I(y0 != ˆy0))```
+- where ˆy0 is the predicted class label that results from applying the classifier to the test observation with predictor x0. A good classifier is one for which the test error (2.9) is smallest.
+
+#### The Bayes Classifier
+- It is possible to show (though the proof is outside of the scope of this book) that the test error rate given in (2.9) is minimized, on average, by a very simple classifier that assigns each observation to the most likely class,
+given its predictor values. 
+- In other words, we should simply assign a test observation with predictor vector x0 to the class j for which
+```PR(Y = j | X = x0)```
+- Is the largest
+- Note that (2.10) is a conditional probability: it is the probability conditional that Y = j, given the observed predictor vector x0.
+-  In a two-class problem where there are only two possible response values, say class 1 or class 2, the Bayes classifier corresponds to predicting class one if ```Pr(Y = 1|X = x0) > 0.5```, and class two otherwise.
+- The Bayes classifier produces the lowest possible test error rate, called the Bayes error rate.
+- Since the Bayes classifier will always choose the class for which (2.10) is largest, the error rate at X = x0 will be ```1 - MAXj Pr(Y=j | X = x0)``` In general, the overall Bayes error rate is given by:
+```
+1 − E ( MAXj Pr(Y = j|X))
+
+```
+- where the expectation averages the probability over all possible values of X. For our simulated data, the Bayes error rate is 0.1304. It is greater than zero, because the classes overlap in the true population so maxj Pr(Y =
+j|X = x0) < 1 for some values of x0. 
+
+#### K-Nearest Neighbors
+- In theory we would always like to predict qualitative responses using the Bayes classifier. But for real data, we do not know the conditional distribution of Y given X, and so computing the Bayes classifier is impossible.
+- Many approaches attempt to estimate the conditional distribution of Y given X, and then classify a given observation to the class with highest estimated probability.
+- Given a positive integer K and a test observation x0, the KNN classifier first identifies the K points in the training data that are closest to x0, represented by n0.
+- It then estimates the conditional probability for class j as the fraction of points in N0 whose response values equal j:
+![k-nearest-neighbour](./img/k-nearest-neighbou.png)
+- Finally, KNN applies Bayes rule and classifies the test observation x0 to the class with the largest probability.
+- Despite the fact that it is a very simple approach, KNN can often produce classifiers that are surprisingly close to the optimal Bayes classifier.
+- The choice of K has a drastic effect on the KNN classifier obtained. Figure 2.16 displays two KNN fits to the simulated data from Figure 2.13, using K = 1 and K = 100.
+- On this simulated data set, neither K = 1 nor K = 100 give good predictions: they have test error rates of 0.1695 and 0.1925, respectively.
+- With K = 1, the KNN training error rate is 0, but the test error rate may be quite high. In general, as we use more flexible classification methods, the training error rate will decline but the test error rate may not.
+
+## Model Evaluation
+
+### Classification Error Metrics
+- classifcation metrics we need to understand is:
+    - Accuracy: 
+        - number of correct predictions / total predictions
+        - not a good choice which unbalanced classes: if we had 99 dog pics and 1 cat pic, model would always say we got 99% accuracy
+    - Recall: 
+        - ability of a model to find all the relevant cases within a dataset
+        - The precise definition of recall is the number of (true positives / (the number of true positives + number of false negatives))
+    - Precision:
+        - ability of a classification model to identify only the relevant data points.
+        - Precision is defined as:
+            - (true positives / (true positives + false positives)) 
+    - Recall and Precision:
+        - often a trade-off between the two
+        - while recall expresses the ability to find all relevant instances in a dataset, precision expresses the proportion of the data points our model says was relevant actually were relevant.
+    - F1-Score
+        - in cases where you want to find optimal blend between recall and precision
+        - is the harmonic mean of precision and recall taking both metrics into account in the following equation:
+            - F1 = 2 * ((precision * recall)/(precision + recall))
+        - uses harmonic mean instead of simple average because it punishes extreme values between precision and recall
+        - 
+- Two outcomes of evalution, correct or incorrect
+- expands where you have multiple classes
+- See soltion matrix: 
+    - https://en.wikipedia.org/wiki/Confusion_matrix#Table_of_confusion
+
+### Regression Error Metrics 
+- We need metrics for continuous values
+- most comoon:                  n
+    - Mean absolute error: 1/n E  | yi - y^i |
+                                i=1
+                              n  
+    - Mean square error: 1/n E  | (yi - y^i )**2
+                              i=1
+    
+    - larger errors are noted more than with MAE, making MSE more popular
+
+    - Root mean square Error: take the square root of the MSE output 
+    - compare your error metric to the average value of the label in your data set to try to get an intuition of its overall performance 
+    - Domain knowledge also plays an important role here
+
+### Install scikit learn 
+
+```
+conda install scikit-learn
+```
+
+### Choosing the right estimator: 
+https://scikit-learn.org/stable/tutorial/machine_learning_map/index.html
