@@ -101,5 +101,35 @@ When we perform multiple linear regression, we usually are interested in answeri
 #### One: Is There a Relationship Between the Response and Predictors?
 - In the multiple regression setting with p predictors, we need to ask whether all of the regression coefficients are zero, i.e. whether β1 = β2 = ··· = βp = 0.
 - We test the null hypothesis, H0 : β1 = β2 = ··· = βp = 0 versus the alternative Ha : at least one βj is non-zero.
-- $$ F = {(TSS - RSS)/p  \over RSS / (n-p-1)} $$ 
+$$ F = {(TSS - RSS)/p  \over RSS / (n-p-1)} $$ 
+- if the linear model assumptions are correct, one can show that E{RSS/(n-p-1) = σ2} and that, provided H0 is true, E{(TSS − RSS)/p} = σ2
+- Hence, when there is no relationship between the response and predictors, one would expect the F-statistic to take on a value close to 1. 
+-  On the other hand, if Ha is true, then E{(TSS − RSS)/p} > σ2, so we expect F to be greater than 1.
+
+#### Two: Deciding on Important Variables
+- As discussed in the previous section, the first step in a multiple regression analysis is to compute the **F-statistic** and to examine the associated **pvalue**.
+- It is possible that all of the predictors are associated with the response, but it is more often the case that the response is only related to a subset of
+the predictors. The task of determining which predictors are associated with the response, in order to fit a single model involving only those predictors,
+is referred to as variable selection.
+- Ideally, we would like to perform variable selection by trying out a lot of different models, each containing a different subset of the predictors. For
+instance, if p = 2, then we can consider four models: (1) a model containing no variables, (2) a model containing X1 only, (3) a model containing
+X2 only, and (4) a model containing both X1 and X2.
+- How do we determine which model is best?
+- Various statistics can be used to judge the quality of a model. These include **Mallow’s Cp**, **Akaike information criterion (AIC)**, **Bayesian information criterion (BIC)**, and adjusted **Akaike**
+-  We can also determine which model is best by plotting various model outputs, such as the residuals, in order to search for patterns.
+-  Therefore, unless p is very small, we cannot consider all 2p models, and instead we need an automated and efficient approach to choose a smaller set of models to consider
+- There are three classical approaches for this task:
+1. Forward selection. We begin with the null model—a model that contains an intercept but no predictors. We then fit p simple linear regressions and add to the null model the variable that results in the lowest RSS. We then add to that model the variable that results in the lowest RSS for the new two-variable model. This approach is continued until some stopping rule is satisfied.
+2. Backward selection. We start with all variables in the model, and backward
+remove the variable with the largest p-value—that is, the variable selection that is the least statistically significant. The new (p − 1)-variable
+model is fit, and the variable with the largest p-value is removed. This procedure continues until a stopping rule is reached. For instance, we may stop when all remaining variables have a p-value below some threshold.
+3. Mixed selection. This is a combination of forward and backward selection. We start with no variables in the model, and as with forward selection, we add the variable that provides the best fit. Hence, if at any point the P-value for one of the variables in the model rises above a certain threshold, then we remove that variable from the model.
+- Backward selection **cannot be used if p>n**, while **forward selection can always be used**. Forward selection is a **greedy approach**, and might include
+variables early that later become redundant. **Mixed selection** can remedy this.
+
+#### Three: Model Fit
+- Two of the most common numerical measures of model fit are the RSE and R2, the fraction of variance explained. These quantities are computed and interpreted in the same fashion as for simple linear regression.
+- Recall that in simple regression, R2 is the square of the correlation of the response and the variable. In multiple linear regression, it turns out that it
+equals Cor(Y, Yˆ)^2, the square of the correlation between the response and the fitted linear model; in fact one property of the fitted linear model is
+that it maximizes this correlation among all possible linear models.
 
